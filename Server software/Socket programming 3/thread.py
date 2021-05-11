@@ -187,39 +187,47 @@ def gui():
 
 # Update function:
     def update():
-        combo_Devices["values"] = Devices
+        # Section 1: "Combobox values check & update"
+        combo_Devices["values"] = Devices                                                       # Transfer "Devices" list values into "Combobox" values
         if combo_Devices.get() not in Devices:
-            combo_Devices.set('')
+            combo_Devices.set('')                                                               # Remove all combobox values
 
-        if ent_devices.get() != str(len(Devices)):
+        # Section 2: "Status-entries values check & update"
+        if ent_devices.get() != str(len(Devices)):                                              # "ent_devices" is the number of online devices
             ent_devices.configure(state=tk.NORMAL)
             ent_devices.delete(0)
-            ent_devices.insert(0, str(len(Devices)))
-        if ent_cars.get() != str(libserver.Devices_number["cars"]):
+            ent_devices.insert(0, str(len(Devices)))                                            # Set online-devices numbers equal to devices-list length
+        if ent_cars.get() != str(libserver.Devices_number["cars"]):                             # check if number of online cars is delivered right to GUI display or not
             ent_cars.configure(state=tk.NORMAL)
             ent_cars.delete(0)
             ent_cars.insert(0, libserver.Devices_number["cars"])
-        if ent_traffic.get() != str(libserver.Devices_number["cars"]):
+        if ent_traffic.get() != str(libserver.Devices_number["traffic"]):
             ent_traffic.configure(state=tk.NORMAL)
             ent_traffic.delete(0)
-            ent_traffic.insert(0, libserver.Devices_number["traffic"])
-        if ent_garage.get() != str (libserver.Devices_number["cars"]):
+            ent_traffic.insert(0, libserver.Devices_number["traffic"])                         # check if number of online traffics is delivered right t GUI entry or not                      # check if number of online traffics is delivered right to GUI display or not
+        if ent_garage.get() != str (libserver.Devices_number["garage"]):
             ent_garage.configure(state=tk.NORMAL)
             ent_garage.delete(0)
-            ent_garage.insert(0, libserver.Devices_number["garage"])
+            ent_garage.insert(0, libserver.Devices_number["garage"])                       # check if number of online garages is delivered right to GUI display or not
+        # Making status entries disabled to any change
         ent_devices.configure(state='disabled')
         ent_cars.configure(state='disabled')
         ent_traffic.configure(state='disabled')
         ent_garage.configure(state='disabled')
+
+        # Section : "Rerun update function each 0.5 second"
         window.after(50, update)
 
+# Close function:
     def Close(self):
         windows[self].destroy()
         windows[self] = None
 
+# Cancelcommand function:
     def __CancelCommand(event=None):
         pass
 
+# Device-info window function:
     def window_device_info(device_name):
         windows[device_name] = tk.Tk()
         windows[device_name].protocol('WM_DELETE_WINDOW', __CancelCommand)
@@ -369,6 +377,7 @@ def gui():
             ent_type.configure(state='disabled')
             ent_speed.configure(state='disabled')
 
+# Devices information function:
     def Devices_info(event):
         device_name = combo_Devices.get()
         for window_name, status in windows.items():
@@ -380,27 +389,29 @@ def gui():
                     windows[device_name].destroy()
                     window_device_info(device_name)
 
+# Devices list unction:
     def devices_List():
-        if open_close_dict["o"]:
-            frames["fr_devi"] = tk.Frame(master=window, relief=tk.RAISED, borderwidth=5)
-            lab_frD = tk.Label(master=frames["fr_devi"], text="Devices List", width=50, font=44)
-            lab_car1 = tk.Label(master=frames["fr_devi"], text="Car1", font=44)
-            lab_car2 = tk.Label(master=frames["fr_devi"], text="Car2", font=44)
-            lab_traffic2 = tk.Label(master=frames["fr_devi"], text="Traffic Lights", font=44)
-            lab_garage2 = tk.Label(master=frames["fr_devi"], text="Garages", font=44)
+        if open_close_dict["o"]:                                                                    # Intially "O" is true
+            # Devices list frame code:
+            frames["fr_devi"] = tk.Frame(master=window, relief=tk.RAISED, borderwidth=5)            # Device frame creation
+            lab_frD = tk.Label(master=frames["fr_devi"], text="Devices List", width=50, font=44)    # "Devices list" label creation
+            lab_car1 = tk.Label(master=frames["fr_devi"], text="Car1", font=44)                     # "Car1" label creation
+            lab_car2 = tk.Label(master=frames["fr_devi"], text="Car2", font=44)                     # "Car2" label creation
+            lab_traffic2 = tk.Label(master=frames["fr_devi"], text="Traffic Lights", font=44)       # "Traffic" labl creation
+            lab_garage2 = tk.Label(master=frames["fr_devi"], text="Garages", font=44)               # "Garage" label creation
 
+            #gridding frame & labels:
             frames["fr_devi"].grid(row=0, column=2, sticky="new", padx=10, pady=5)
-
             lab_frD.grid(row=0, column=0, sticky="nsew")
             lab_car1.grid(row=2, column=0, sticky="w", pady=5)
             lab_car2.grid(row=3, column=0, sticky="w", pady=5)
             lab_traffic2.grid(row=4, column=0, sticky="w", pady=5)
             lab_garage2.grid(row=5, column=0, sticky="w", pady=5)
 
-            open_close_dict["o"] = False
+            open_close_dict["o"] = False                                                            # Set "O" value to "False"
         else:
-            frames["fr_devi"].grid_forget()
-            open_close_dict["o"] = True
+            frames["fr_devi"].grid_forget()                                                         # Remove gridded "Device list" frame
+            open_close_dict["o"] = True                                                             # Set "O" value to "True"
 
 # Main code:
 # window
